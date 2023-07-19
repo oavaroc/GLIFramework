@@ -31,6 +31,10 @@ public class Player : MonoBehaviour
         if (Physics.Raycast(rayOrigin, out hit, Mathf.Infinity, 1 << 6 | 1 << 7))
         {
             Debug.Log("Hit: " + hit.collider.name);
+            if (hit.collider.gameObject.TryGetComponent( out AIController _aicontroller))
+            {
+                _aicontroller.ChangeState(new DeathState(_aicontroller));
+            }
         }
     }
 }
