@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyMovement : MonoBehaviour
 {
     private Vector3 _destination;
     private NavMeshAgent _ai;
@@ -18,7 +18,6 @@ public class EnemyAI : MonoBehaviour
             UpdateDestination();
             StartCoroutine(MoveToNextWaypoint());
         }
-
     }
 
     private void UpdateDestination()
@@ -49,7 +48,7 @@ public class EnemyAI : MonoBehaviour
                     }
                 }
 
-                yield return new WaitForSeconds(0.2f); // Wait for the next frame
+                yield return new WaitForSeconds(0.2f); // Wait for .2s
             }
         }
         else
@@ -57,5 +56,17 @@ public class EnemyAI : MonoBehaviour
             Debug.LogWarning("No valid path to the destination!");
             gameObject.SetActive(false);
         }
+    }
+
+    public void MoveTowardsDestination(Vector3 destination)
+    {
+        _destination = destination;
+        _ai.SetDestination(destination);
+        _ai.isStopped = false;
+    }
+
+    public void StopMoving()
+    {
+        _ai.isStopped = true;
     }
 }

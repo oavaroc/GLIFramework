@@ -171,7 +171,8 @@ GameObject:
   m_Component:
   - component: {fileID: 335423309677829853}
   - component: {fileID: 5928854140133721255}
-  - component: {fileID: 9057192435715444934}
+  - component: {fileID: 3256895500634223134}
+  - component: {fileID: 8863021060811922911}
   - component: {fileID: 5866666021245213623}
   m_Layer: 0
   m_Name: Robot 1
@@ -217,7 +218,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &9057192435715444934
+--- !u!114 &3256895500634223134
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -226,7 +227,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1147425138523489383}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eed02a3ba326ded47ab79f9e7f5f079a, type: 3}
+  m_Script: {fileID: 11500000, guid: b35fc85b961b89547a200937dbe09be3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endPoint: {fileID: 0}
+--- !u!114 &8863021060811922911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147425138523489383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce785f4927af7fb40a6234a4e5df9baf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!195 &5866666021245213623
