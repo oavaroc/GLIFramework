@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour
     public float _countdownDuration = 180f;
     private float _currentTime;
 
+    private Coroutine _gameLoop;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +21,7 @@ public class GameController : MonoBehaviour
         UIManager.Instance.UpdateTimerDisplay(_currentTime);
 
         // Start the timer coroutine
-        StartCoroutine(StartTimer());
+        _gameLoop=StartCoroutine(StartTimer());
     }
 
     private IEnumerator StartTimer()
@@ -39,6 +41,7 @@ public class GameController : MonoBehaviour
             if(SpawnManager.Instance.GetActiveEnemies() == 0 && SpawnManager.Instance.GetEnemiesToSpawn() == 0)
             {
                 HandleGameWin();
+                StopCoroutine(_gameLoop);
             }
         }
 

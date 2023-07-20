@@ -16782,7 +16782,7 @@ MonoBehaviour:
   _EnemyCount: {fileID: 436991985}
   _AmmoCount: {fileID: 1900035482}
   _TimerText: {fileID: 1511879270}
-  _WinLossText: {fileID: 0}
+  _WinLossText: {fileID: 1934746608}
 --- !u!1001 &744967268
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39001,7 +39001,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemy: {fileID: 1147425138523489383, guid: f7b345f481361c94a9777b2d0e238962, type: 3}
-  _enemiesThisRound: 150
+  _enemiesThisRound: 10
 --- !u!4 &1612041637
 Transform:
   m_ObjectHideFlags: 0
@@ -47941,7 +47941,7 @@ MonoBehaviour:
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 18
+  m_fontSizeMin: 7
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 1
