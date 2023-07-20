@@ -26,6 +26,11 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
         return _enemies;
     }
 
+    public List<GameObject> GetEnemyList()
+    {
+        return _enemies;
+    }
+
     public GameObject RequestEnemy()
     {
         GameObject _enemyToReturn = _enemies.Find(x => !x.activeSelf);

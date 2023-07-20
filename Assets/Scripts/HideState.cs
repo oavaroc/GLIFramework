@@ -14,13 +14,17 @@ public class HideState : State
 
     public override void Enter()
     {
+        Debug.Log("Entering Hide State " );
         // When entering Hide state, find nearest hiding place in front of them, run there
         aiController.StopMoving();
+        aiController.HideAnimationStart();
+        aiController.ShrinkCollider();
         _hideTimer = 0f;
     }
 
     public override void Update()
     {
+        Debug.Log("_hideTimer : "+ _hideTimer + " / _hideDuration : " + _hideDuration);
         // hide for a time when at the hiding spot, then go to run state
         _hideTimer += Time.deltaTime;
         if (_hideTimer >= _hideDuration)
@@ -31,6 +35,8 @@ public class HideState : State
 
     public override void Exit()
     {
-        // Do nothing
+        aiController.HideAnimationStop();
+        aiController.ExpandCollider();
+        aiController.HideComplete();
     }
 }

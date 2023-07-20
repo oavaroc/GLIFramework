@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
+    //[SerializeField]
     private Vector3 _destination;
     private NavMeshAgent _ai;
 
@@ -15,46 +16,7 @@ public class EnemyMovement : MonoBehaviour
         if (_ai != null)
         {
             _destination = WaypointManager.Instance.GetDestination().position;
-            UpdateDestination();
-            StartCoroutine(MoveToNextWaypoint());
-        }
-    }
-
-    private void UpdateDestination()
-    {
-        transform.position = WaypointManager.Instance.GetSpawnPoint().position;
-        _ai.SetDestination(_destination);
-    }
-
-    private IEnumerator MoveToNextWaypoint()
-    {
-        NavMeshPath path = new NavMeshPath();
-
-        _ai.CalculatePath(_destination, path);
-
-        if (path.status == NavMeshPathStatus.PathComplete)
-        {
-            while (true)
-            {
-                if (_ai.hasPath)
-                {
-                    float distanceToDestination = _ai.remainingDistance;
-                    Debug.Log("Actual Distance to Destination: " + distanceToDestination);
-
-                    if (distanceToDestination < 1f)
-                    {
-                        Debug.Log("Reached Destination, Deactivating");
-                        gameObject.SetActive(false);
-                    }
-                }
-
-                yield return new WaitForSeconds(0.2f); // Wait for .2s
-            }
-        }
-        else
-        {
-            Debug.LogWarning("No valid path to the destination!");
-            gameObject.SetActive(false);
+            _ai.SetDestination(WaypointManager.Instance.GetDestination().position);
         }
     }
 
@@ -67,6 +29,18 @@ public class EnemyMovement : MonoBehaviour
 
     public void StopMoving()
     {
-        _ai.isStopped = true;
+        if (_ai.isOnNavMesh)
+        {
+            _ai.isStopped = true;
+        }
     }
+    public void ResumeMoving()
+    {
+        _ai.isStopped = false;
+    }
+    /*
+    public float DistanceRemaining()
+    {
+        return Vector3.SqrMagnitude(transform.position - _destination);
+    }*/
 }
