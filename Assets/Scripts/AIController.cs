@@ -5,7 +5,6 @@ using UnityEngine;
 public class AIController : MonoBehaviour
 {
     private Transform endPoint;
-    public int Score { get; set; }
     [SerializeField]
     private State currentState;
     private EnemyMovement enemyMovement;

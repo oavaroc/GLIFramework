@@ -8,11 +8,11 @@ public class DeathState : State
 
     public override void Enter()
     {
+        UIManager.Instance.AddScore(50);
         aiController.DisableCollider();
         aiController.TellEnemiesToHide();
         aiController.StopMoving();
         aiController.DeathAnimationStart();
-        aiController.Score += 50;
     }
 
     public override void Update()
