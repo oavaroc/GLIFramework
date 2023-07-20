@@ -8,7 +8,10 @@ public class DeathState : State
 
     public override void Enter()
     {
-        aiController.DeathAnimation();
+        aiController.DisableCollider();
+        aiController.TellEnemiesToHide();
+        aiController.StopMoving();
+        aiController.DeathAnimationStart();
         aiController.Score += 50;
     }
 
@@ -19,6 +22,8 @@ public class DeathState : State
 
     public override void Exit()
     {
-        //Do Nothing
+        Debug.Log("In exit: Enabling Collider again");
+        aiController.EnableCollider();
+        aiController.DeathAnimationStop();
     }
 }
