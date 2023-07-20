@@ -24,7 +24,7 @@ public class HideState : State
 
     public override void Update()
     {
-        Debug.Log("_hideTimer : "+ _hideTimer + " / _hideDuration : " + _hideDuration);
+        //Debug.Log("_hideTimer : "+ _hideTimer + " / _hideDuration : " + _hideDuration);
         // hide for a time when at the hiding spot, then go to run state
         _hideTimer += Time.deltaTime;
         if (_hideTimer >= _hideDuration)

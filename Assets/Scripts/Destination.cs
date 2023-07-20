@@ -8,6 +8,9 @@ public class Destination : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
+            SpawnManager.Instance.UpdateActiveEnemies(-1);
+            SpawnManager.Instance.UpdateEnemiesBreached();
+
             other.gameObject.SetActive(false);
         }
     }

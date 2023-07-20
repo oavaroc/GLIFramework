@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
-    //[SerializeField]
     private Vector3 _destination;
     private NavMeshAgent _ai;
 
@@ -16,12 +15,13 @@ public class EnemyMovement : MonoBehaviour
         if (_ai != null)
         {
             _destination = WaypointManager.Instance.GetDestination().position;
-            _ai.SetDestination(WaypointManager.Instance.GetDestination().position);
+            _ai.SetDestination(_destination);
         }
     }
 
     public void MoveTowardsDestination(Vector3 destination)
     {
+        Debug.Log("Moving to destination: " + destination);
         _destination = destination;
         _ai.SetDestination(destination);
         _ai.isStopped = false;
@@ -31,16 +31,13 @@ public class EnemyMovement : MonoBehaviour
     {
         if (_ai.isOnNavMesh)
         {
+            Debug.Log("Stop moving");
             _ai.isStopped = true;
         }
     }
     public void ResumeMoving()
     {
+        Debug.Log("Resume moving");
         _ai.isStopped = false;
     }
-    /*
-    public float DistanceRemaining()
-    {
-        return Vector3.SqrMagnitude(transform.position - _destination);
-    }*/
 }

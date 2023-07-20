@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class AIController : MonoBehaviour
 {
-    private Transform endPoint;
+    private Transform _endPoint;
     [SerializeField]
-    private State currentState;
-    private EnemyMovement enemyMovement;
-    private float distanceThreshold = 5f;
+    private State _currentState;
+    private EnemyMovement _enemyMovement;
+    private float _distanceThreshold = 5f;
 
     private Animator _anim;
 
     private CapsuleCollider _collider;
 
     private bool _goingToHidingSpot = false;
+
+    private bool _isDead = false;
 
     private void Start()
     {
@@ -24,45 +26,56 @@ public class AIController : MonoBehaviour
             Debug.Log("Enemy Collider is NULL");
         }
         _anim = GetComponent<Animator>();
-        enemyMovement = GetComponent<EnemyMovement>();
-        if (enemyMovement == null)
+        _enemyMovement = GetComponent<EnemyMovement>();
+        if (_enemyMovement == null)
         {
             Debug.Log("Enemy Movement is NULL");
         }
 
-        endPoint = WaypointManager.Instance.GetDestination();
+        _endPoint = WaypointManager.Instance.GetDestination();
         // Start with the Run state
-        currentState = new RunState(this);
-        currentState.Enter();
+        _currentState = new RunState(this);
+        _currentState.Enter();
     }
 
+    public bool GetIsDead()
+    {
+        return _isDead;
+    }
+
+    public void SetIsDead(bool isDead)
+    {
+        _isDead = isDead;
+    }
 
     public void HideAnimationStart()
     {
+        Debug.Log("Hide anim started");
         _anim.SetBool("Hiding",true);
 
     }
     public void HideAnimationStop()
     {
+        Debug.Log("Hide anim stopped");
         _anim.SetBool("Hiding", false);
 
     }
 
     private void Update()
     {
-        currentState.Update();
+        _currentState.Update();
     }
 
     public void ChangeState(State newState)
     {
-        currentState.Exit();
-        currentState = newState;
-        currentState.Enter();
+        _currentState.Exit();
+        _currentState = newState;
+        _currentState.Enter();
     }
 
     public void UpdateDestination()
     {
-        enemyMovement.MoveTowardsDestination(endPoint.position);
+        _enemyMovement.MoveTowardsDestination(_endPoint.position);
     }
     public void UpdateDestination(Vector3 position)
     {
@@ -73,7 +86,7 @@ public class AIController : MonoBehaviour
         }
         else
         {
-            enemyMovement.MoveTowardsDestination(position);
+            _enemyMovement.MoveTowardsDestination(position);
             _goingToHidingSpot = true;
 
         }
@@ -105,20 +118,14 @@ public class AIController : MonoBehaviour
     {
         return _goingToHidingSpot;
     }
-    /*
-    public float RemainingDistance()
-    {
-        Debug.Log("Distance remaining: " + enemyMovement.DistanceRemaining());
-        return enemyMovement.DistanceRemaining();
-    }*/
 
     public void StopMoving()
     {
-        enemyMovement.StopMoving();
+        _enemyMovement.StopMoving();
     }
     public void ResumeMoving()
     {
-        enemyMovement.ResumeMoving();
+        _enemyMovement.ResumeMoving();
     }
 
     public void DeathAnimationStart()
@@ -136,7 +143,7 @@ public class AIController : MonoBehaviour
         foreach (GameObject obj in ObjectPoolManager.Instance.GetEnemyList())
         {
             float distance = Vector3.Distance(obj.transform.position, transform.position);
-            if (distance <= distanceThreshold)
+            if (distance <= _distanceThreshold)
             {
                 AIController aiController = obj.GetComponent<AIController>();
                 if (aiController != null)

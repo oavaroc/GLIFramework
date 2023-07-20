@@ -7,19 +7,55 @@ public class SpawnManager : MonoSingleton<SpawnManager>
     [SerializeField]
     private GameObject _enemy;
 
-    private bool _keepSpawning = false;
+    [SerializeField]
+    private int _enemiesThisRound;
+
+    private int _enemiesToSpawn;
+
+    private int _enemiesBreached;
+
+    private bool _keepSpawning = true;
+
+    private int _activeEnemies = 0;
+
+    public void UpdateEnemiesBreached()
+    {
+        _enemiesBreached++;
+    }
+    public int GetEnemiesBreached()
+    {
+        return _enemiesBreached;
+    }
 
     public void StartSpawning()
     {
-        _keepSpawning = true;
+        _enemiesToSpawn = _enemiesThisRound;
         StartCoroutine(SpawnRoutine());
+    }
+
+    public int GetActiveEnemies()
+    {
+        return _activeEnemies;
+    }
+
+    public int GetEnemiesToSpawn()
+    {
+        return _enemiesToSpawn;
+    }
+
+
+    public void UpdateActiveEnemies(int count)
+    {
+        _activeEnemies += count;
     }
 
     private IEnumerator SpawnRoutine()
     {
-        while (_keepSpawning)
+        while (_enemiesToSpawn>0 && _keepSpawning)
         {
             SpawnEnemy(ObjectPoolManager.Instance.RequestEnemy());
+            _enemiesToSpawn--;
+            _activeEnemies++;
             yield return new WaitForSeconds(1f);
 
         }
@@ -29,6 +65,12 @@ public class SpawnManager : MonoSingleton<SpawnManager>
     {
         enemy.transform.position = WaypointManager.Instance.GetSpawnPoint().position;
         enemy.SetActive(true);
+        Debug.Log("EnemySpawned");
+    }
+
+    public void StopSpawning()
+    {
+        _keepSpawning = false;
     }
 
 }

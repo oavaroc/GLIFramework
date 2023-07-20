@@ -8,11 +8,15 @@ public class DeathState : State
 
     public override void Enter()
     {
+        UIManager.Instance.UpdateEnemyCount(1);
         UIManager.Instance.AddScore(50);
+        SpawnManager.Instance.UpdateActiveEnemies(-1);
+        aiController.SetIsDead(true);
         aiController.DisableCollider();
         aiController.TellEnemiesToHide();
         aiController.StopMoving();
         aiController.DeathAnimationStart();
+        Debug.Log("Enemy Died");
     }
 
     public override void Update()
