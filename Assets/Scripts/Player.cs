@@ -75,13 +75,23 @@ public class Player : MonoBehaviour
         Debug.Log("Hit: " + hit.collider.name);
         if (hit.collider.gameObject.TryGetComponent(out AIController aicontroller))
         {
-            HitAI(aicontroller);
+            if (aicontroller != null)
+            {
+                HitAI(aicontroller);
+            }
         }
         else if (hit.collider.gameObject.TryGetComponent(out ForceBarrier forceBarrier))
         {
             if (forceBarrier != null)
             {
                 HitForceBarrier(forceBarrier, forceBarrier.GetHealth());
+            }
+        }
+        else if(hit.collider.gameObject.TryGetComponent(out GasBarrel gasBarrel))
+        {
+            if (gasBarrel != null)
+            {
+                gasBarrel.ExplodeBarrel();
             }
         }
     }

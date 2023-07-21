@@ -22,10 +22,13 @@ public class EnemyMovement : MonoBehaviour
 
     public void MoveTowardsDestination(Vector3 destination)
     {
-        Debug.Log("Moving to destination: " + destination);
-        _destination = destination;
-        _ai.SetDestination(destination);
-        _ai.isStopped = false;
+        if (_ai.isOnNavMesh)
+        {
+            Debug.Log("Moving to destination: " + destination);
+            _destination = destination;
+            _ai.SetDestination(destination);
+            _ai.isStopped = false;
+        }
     }
 
     public void StopMoving()
@@ -38,8 +41,11 @@ public class EnemyMovement : MonoBehaviour
     }
     public void ResumeMoving()
     {
-        Debug.Log("Resume moving");
-        _ai.isStopped = false;
-        _ai.speed += 0.1f;
+        if (_ai.isOnNavMesh)
+        {
+            Debug.Log("Resume moving");
+            _ai.isStopped = false;
+            _ai.speed += 0.1f;
+        }
     }
 }

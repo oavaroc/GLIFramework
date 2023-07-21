@@ -14,12 +14,21 @@ public class HideState : State
 
     public override void Enter()
     {
-        Debug.Log("Entering Hide State " );
-        // When entering Hide state, find nearest hiding place in front of them, run there
-        aiController.StopMoving();
-        aiController.HideAnimationStart();
-        aiController.ShrinkCollider();
-        _hideTimer = 0f;
+        if (aiController.GetNeverFear())
+        {
+
+            aiController.ChangeState(new RunState(aiController));
+        }
+        else
+        {
+            Debug.Log("Entering Hide State " );
+            // When entering Hide state, find nearest hiding place in front of them, run there
+            aiController.StopMoving();
+            aiController.HideAnimationStart();
+            aiController.ShrinkCollider();
+            _hideTimer = 0f;
+
+        }
     }
 
     public override void Update()

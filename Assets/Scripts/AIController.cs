@@ -18,11 +18,18 @@ public class AIController : MonoBehaviour
 
     private bool _isDead = false;
 
+    private bool _neverFear = false;
+
     [SerializeField]
     private AudioSource _deathSound;
 
     private void Start()
     {
+        if(Random.Range(0f, 100f) < 10f)
+        {
+            // 10% of the time, the enemy will never hide and run straight for the end
+            _neverFear = true;
+        }
         _collider = gameObject.GetComponent<CapsuleCollider>();
         if (_collider == null)
         {
@@ -39,6 +46,15 @@ public class AIController : MonoBehaviour
         // Start with the Run state
         _currentState = new RunState(this);
         _currentState.Enter();
+    }
+
+    public bool GetNeverFear()
+    {
+        return _neverFear;
+    }
+    public void SetNeverFear(bool value)
+    {
+        _neverFear = value;
     }
 
     public bool GetIsDead()
@@ -79,37 +95,6 @@ public class AIController : MonoBehaviour
     public void UpdateDestination()
     {
         _enemyMovement.MoveTowardsDestination(_endPoint.position);
-    }
-    public void UpdateDestination(Vector3 position)
-    {
-
-        if(position == null || WillTurnAround(position))
-        {
-            UpdateDestination();
-        }
-        else
-        {
-            _enemyMovement.MoveTowardsDestination(position);
-            _goingToHidingSpot = true;
-
-        }
-    }
-
-    public bool WillTurnAround(Vector3 destination)
-    {
-        //if enemy will run back up stairs to a barrier, dont
-        if (destination.y-1 > transform.position.y)
-            return true;
-
-        // Get the direction from the agent's position to the destination
-        Vector3 directionToDestination = destination - transform.position;
-
-        // Calculate the angle between the agent's forward direction and the direction to the destination
-        float angle = Vector3.Angle(transform.forward, directionToDestination);
-
-        // Determine if the angle is greater than 90 degrees (turning backwards)
-        return angle > 90f;
-
     }
 
     public void HideComplete()
@@ -158,7 +143,16 @@ public class AIController : MonoBehaviour
         AIController aiController = obj.GetComponent<AIController>();
         if (aiController != null)
         {
-            aiController.ChangeState(new HideState(aiController));
+            if(aiController._currentState is HideState)
+            {
+                //Not hidden enough, run away!
+                aiController.ChangeState(new RunState(aiController));
+            }
+            else
+            {
+                aiController.ChangeState(new HideState(aiController));
+
+            }
         }
 
     }
