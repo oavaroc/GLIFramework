@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour
 
         // Start the timer coroutine
         _gameLoop=StartCoroutine(StartTimer());
+        AudioManager.Instance.PlayBackgroundMusic();
     }
 
     private IEnumerator StartTimer()
@@ -38,7 +39,7 @@ public class GameController : MonoBehaviour
 
             // Update the timer display
             UIManager.Instance.UpdateTimerDisplay(_currentTime);
-            if(SpawnManager.Instance.GetActiveEnemies() == 0 && SpawnManager.Instance.GetEnemiesToSpawn() == 0)
+            if(SpawnManager.Instance.GetActiveEnemies() == 0 && SpawnManager.Instance.GetEnemiesToSpawn() == 0 && SpawnManager.Instance.GetBreachedPercent() < 0.5f)
             {
                 HandleGameWin();
                 StopCoroutine(_gameLoop);

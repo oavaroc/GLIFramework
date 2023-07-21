@@ -18,6 +18,9 @@ public class AIController : MonoBehaviour
 
     private bool _isDead = false;
 
+    [SerializeField]
+    private AudioSource _deathSound;
+
     private void Start()
     {
         _collider = gameObject.GetComponent<CapsuleCollider>();
@@ -130,6 +133,7 @@ public class AIController : MonoBehaviour
 
     public void DeathAnimationStart()
     {
+        AudioManager.Instance.PlayRobotDeath();
         _anim.SetBool("Dead", true);
         StartCoroutine(SetInactiveRoutine());
     }

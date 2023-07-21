@@ -12,6 +12,7 @@ public class Destination : MonoBehaviour
             SpawnManager.Instance.UpdateEnemiesBreached();
 
             other.gameObject.SetActive(false);
+            AudioManager.Instance.PlayEnemyBreached();
         }
     }
 }
