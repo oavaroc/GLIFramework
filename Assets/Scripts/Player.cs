@@ -48,33 +48,62 @@ public class Player : MonoBehaviour
     {
         if (UIManager.Instance.GetAmmoCount() > 0 && !_isReloading && Time.time >= _fireTimer)
         {
-            _fireTimer = Time.time + _fireCoolDown;
-            AudioManager.Instance.PlayGunFire();
-            UIManager.Instance.UpdateAmmoCount(-1);
-            Cursor.lockState = CursorLockMode.Locked;
-            Debug.Log("Fire performed");
-            Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-
-            RaycastHit hit;
-            if (Physics.Raycast(rayOrigin, out hit, Mathf.Infinity, _layerMask))
-            {
-                Debug.Log("Hit: " + hit.collider.name);
-                if (hit.collider.gameObject.TryGetComponent( out AIController _aicontroller))
-                {
-                    if(!_aicontroller.GetIsDead())
-                    {
-                        _aicontroller.ChangeState(new DeathState(_aicontroller));
-                    }
-                }else if(hit.collider.name.Contains("Force Barrier"))
-                {
-                    AudioManager.Instance.PlayForceBarrierHit();
-                }
-            }
-
+            FireShot();
         }
         else if(Time.time >= _fireTimer)
         {
             AudioManager.Instance.PlayEmptyFire();
+        }
+    }
+    private void FireShot()
+    {
+        _fireTimer = Time.time + _fireCoolDown;
+        AudioManager.Instance.PlayGunFire();
+        UIManager.Instance.UpdateAmmoCount(-1);
+        Cursor.lockState = CursorLockMode.Locked;
+        Debug.Log("Fire performed");
+        Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+
+        RaycastHit hit;
+        if (Physics.Raycast(rayOrigin, out hit, Mathf.Infinity, _layerMask))
+        {
+            RaycastHitSomething(hit);
+        }
+    }
+    private void RaycastHitSomething(RaycastHit hit)
+    {
+        Debug.Log("Hit: " + hit.collider.name);
+        if (hit.collider.gameObject.TryGetComponent(out AIController aicontroller))
+        {
+            HitAI(aicontroller);
+        }
+        else if (hit.collider.gameObject.TryGetComponent(out ForceBarrier forceBarrier))
+        {
+            if (forceBarrier != null)
+            {
+                HitForceBarrier(forceBarrier, forceBarrier.GetHealth());
+            }
+        }
+    }
+
+    private void HitAI(AIController aicontroller)
+    {
+        if (!aicontroller.GetIsDead())
+        {
+            aicontroller.ChangeState(new DeathState(aicontroller));
+        }
+
+    }
+
+    private void HitForceBarrier(ForceBarrier forceBarrier, int health)
+    {
+        AudioManager.Instance.PlayForceBarrierHit();
+        if (health > 0)
+        {
+            if (forceBarrier.SetHealth(health - 1) == 0)
+            {
+                BarrierManager.Instance.DisableForceBarrier(forceBarrier);
+            }
         }
     }
 }

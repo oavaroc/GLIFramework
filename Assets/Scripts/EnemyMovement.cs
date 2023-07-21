@@ -16,6 +16,7 @@ public class EnemyMovement : MonoBehaviour
         {
             _destination = WaypointManager.Instance.GetDestination().position;
             _ai.SetDestination(_destination);
+            _ai.speed = Random.Range(5f, 7f);
         }
     }
 
@@ -39,5 +40,6 @@ public class EnemyMovement : MonoBehaviour
     {
         Debug.Log("Resume moving");
         _ai.isStopped = false;
+        _ai.speed += 0.1f;
     }
 }

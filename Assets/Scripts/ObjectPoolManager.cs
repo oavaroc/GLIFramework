@@ -48,4 +48,13 @@ public class ObjectPoolManager : MonoSingleton<ObjectPoolManager>
         _enemies.Add(enemy);
         return enemy;
     }
+
+    public void DespawnOnLoss()
+    {
+        foreach(GameObject enemy in _enemies)
+        {
+            enemy.SetActive(false);
+        }
+
+    }
 }

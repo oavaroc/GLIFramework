@@ -33,26 +33,34 @@ public class GameController : MonoBehaviour
         {
             // Wait for 1 second
             yield return new WaitForSeconds(1f);
-
-            // Decrement the timer
-            _currentTime -= 1f;
-
-            // Update the timer display
-            UIManager.Instance.UpdateTimerDisplay(_currentTime);
-            if(SpawnManager.Instance.GetActiveEnemies() == 0 && SpawnManager.Instance.GetEnemiesToSpawn() == 0 && SpawnManager.Instance.GetBreachedPercent() < 0.5f)
-            {
-                HandleGameWin();
-                StopCoroutine(_gameLoop);
-            }
-            else if (SpawnManager.Instance.GetBreachedPercent() >= 0.5f)
-            {
-                HandleGameOver();
-                StopCoroutine(_gameLoop);
-            }
+            UpdateUI();
+            DecideWinOrLose();
         }
 
         // Timer has reached 0, handle game over 
         HandleGameOver();
+    }
+    private void DecideWinOrLose()
+    {
+        if (SpawnManager.Instance.GetActiveEnemies() == 0 && SpawnManager.Instance.GetEnemiesToSpawn() == 0 && SpawnManager.Instance.GetBreachedPercent() < 0.5f)
+        {
+            HandleGameWin();
+            StopCoroutine(_gameLoop);
+        }
+        else if (SpawnManager.Instance.GetBreachedPercent() >= 0.5f)
+        {
+            HandleGameOver();
+            StopCoroutine(_gameLoop);
+        }
+    }
+    private void UpdateUI()
+    {
+        // Decrement the timer
+        _currentTime -= 1f;
+
+        // Update the timer display
+        UIManager.Instance.UpdateTimerDisplay(_currentTime);
+
     }
 
     private void HandleGameWin()
@@ -66,6 +74,7 @@ public class GameController : MonoBehaviour
     {
         Debug.Log("Game Over!");
         SpawnManager.Instance.StopSpawning();
+        ObjectPoolManager.Instance.DespawnOnLoss();
         UIManager.Instance.UpdateWinLossText("You Lose!");
     }
 }

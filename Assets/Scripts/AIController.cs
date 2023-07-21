@@ -149,14 +149,20 @@ public class AIController : MonoBehaviour
             float distance = Vector3.Distance(obj.transform.position, transform.position);
             if (distance <= _distanceThreshold)
             {
-                AIController aiController = obj.GetComponent<AIController>();
-                if (aiController != null)
-                {
-                    aiController.ChangeState(new HideState(aiController));
-                }
+                TellAIToHide(obj);
             }
         }
     }
+    private void TellAIToHide(GameObject obj)
+    {
+        AIController aiController = obj.GetComponent<AIController>();
+        if (aiController != null)
+        {
+            aiController.ChangeState(new HideState(aiController));
+        }
+
+    }
+
     public void ShrinkCollider()
     {
         _collider.height = 1f;
