@@ -43,6 +43,11 @@ public class GameController : MonoBehaviour
                 HandleGameWin();
                 StopCoroutine(_gameLoop);
             }
+            else if (SpawnManager.Instance.GetBreachedPercent() >= 0.5f)
+            {
+                HandleGameOver();
+                StopCoroutine(_gameLoop);
+            }
         }
 
         // Timer has reached 0, handle game over 

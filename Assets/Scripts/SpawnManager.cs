@@ -22,9 +22,9 @@ public class SpawnManager : MonoSingleton<SpawnManager>
     {
         _enemiesBreached++;
     }
-    public int GetEnemiesBreached()
+    public float GetBreachedPercent()
     {
-        return _enemiesBreached;
+        return (float)_enemiesBreached/_enemiesThisRound;
     }
 
     public void StartSpawning()
