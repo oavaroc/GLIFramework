@@ -9,6 +9,7 @@ public class RunState : State
 
     public override void Enter()
     {
+        aiController.EnableCollider();
         aiController.SetIsDead(false);
         aiController.ResumeMoving();
         aiController.UpdateDestination();

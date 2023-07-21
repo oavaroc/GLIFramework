@@ -31,12 +31,14 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+
     public void StopMoving()
     {
         if (_ai.isOnNavMesh)
         {
             Debug.Log("Stop moving");
             _ai.isStopped = true;
+            _ai.SetDestination(transform.position);
         }
     }
     public void ResumeMoving()
@@ -46,6 +48,7 @@ public class EnemyMovement : MonoBehaviour
             Debug.Log("Resume moving");
             _ai.isStopped = false;
             _ai.speed += 0.1f;
+            _ai.SetDestination(WaypointManager.Instance.GetDestination().position);
         }
     }
 }

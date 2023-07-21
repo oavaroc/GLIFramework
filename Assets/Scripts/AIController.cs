@@ -30,22 +30,35 @@ public class AIController : MonoBehaviour
             // 10% of the time, the enemy will never hide and run straight for the end
             _neverFear = true;
         }
-        _collider = gameObject.GetComponent<CapsuleCollider>();
-        if (_collider == null)
-        {
-            Debug.Log("Enemy Collider is NULL");
-        }
         _anim = GetComponent<Animator>();
+
         _enemyMovement = GetComponent<EnemyMovement>();
         if (_enemyMovement == null)
         {
             Debug.Log("Enemy Movement is NULL");
         }
-
         _endPoint = WaypointManager.Instance.GetDestination();
         // Start with the Run state
         _currentState = new RunState(this);
         _currentState.Enter();
+    }
+    private void OnEnable()
+    {
+        if (_enemyMovement == null)
+        {
+            _enemyMovement = GetComponent<EnemyMovement>();
+            if (_enemyMovement == null)
+            {
+                Debug.Log("Enemy Movement is NULL");
+            }
+        }
+        _endPoint = WaypointManager.Instance.GetDestination();
+        _collider = gameObject.GetComponent<CapsuleCollider>();
+        if (_collider == null)
+        {
+            Debug.Log("Enemy Collider is NULL");
+        }
+        
     }
 
     public bool GetNeverFear()
@@ -87,9 +100,17 @@ public class AIController : MonoBehaviour
 
     public void ChangeState(State newState)
     {
-        _currentState.Exit();
-        _currentState = newState;
-        _currentState.Enter();
+        if (_currentState == null)
+        {
+            _currentState = newState;
+            _currentState.Enter();
+        }
+        else
+        {
+            _currentState.Exit();
+            _currentState = newState;
+            _currentState.Enter();
+        }
     }
 
     public void UpdateDestination()
@@ -113,17 +134,20 @@ public class AIController : MonoBehaviour
     }
     public void ResumeMoving()
     {
-        _enemyMovement.ResumeMoving();
+        if(!_isDead)
+            _enemyMovement.ResumeMoving();
     }
 
     public void DeathAnimationStart()
     {
+        _isDead = true;
         AudioManager.Instance.PlayRobotDeath();
         _anim.SetBool("Dead", true);
         StartCoroutine(SetInactiveRoutine());
     }
     public void DeathAnimationStop()
     {
+        _isDead = false;
         _anim.SetBool("Dead", false);
     }
 
@@ -143,14 +167,18 @@ public class AIController : MonoBehaviour
         AIController aiController = obj.GetComponent<AIController>();
         if (aiController != null)
         {
-            if(aiController._currentState is HideState)
+            if (!aiController.GetIsDead())
             {
-                //Not hidden enough, run away!
-                aiController.ChangeState(new RunState(aiController));
-            }
-            else
-            {
-                aiController.ChangeState(new HideState(aiController));
+                if(aiController._currentState is HideState)
+                {
+                    //Not hidden enough, run away!
+                    aiController.ChangeState(new RunState(aiController));
+                }
+                else
+                {
+                    aiController.ChangeState(new HideState(aiController));
+
+                }
 
             }
         }

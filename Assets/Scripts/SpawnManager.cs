@@ -65,7 +65,16 @@ public class SpawnManager : MonoSingleton<SpawnManager>
     {
         enemy.transform.position = WaypointManager.Instance.GetSpawnPoint().position;
         enemy.SetActive(true);
+        SetEnemyRunState(enemy);
         Debug.Log("EnemySpawned");
+    }
+
+    private void SetEnemyRunState(GameObject enemy)
+    {
+        if(enemy.TryGetComponent(out AIController aicontroller))
+        {
+            aicontroller.ChangeState(new RunState(aicontroller));
+        }
     }
 
     public void StopSpawning()
